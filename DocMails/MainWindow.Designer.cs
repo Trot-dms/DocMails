@@ -28,9 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.gb3 = new System.Windows.Forms.GroupBox();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.errorsList = new System.Windows.Forms.ListBox();
+            this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.openFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.filesStatus = new System.Windows.Forms.ListBox();
+            this.infoButton = new System.Windows.Forms.Button();
+            this.copyToClip = new System.Windows.Forms.Button();
             this.gb2 = new System.Windows.Forms.GroupBox();
             this.emailsList = new System.Windows.Forms.ListBox();
             this.gb1 = new System.Windows.Forms.GroupBox();
@@ -43,10 +51,12 @@
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.folderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
-            this.copyToClip = new System.Windows.Forms.Button();
-            this.infoButton = new System.Windows.Forms.Button();
+            this.fileProcessing = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1.SuspendLayout();
-            this.gb3.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.contextMenu.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.gb2.SuspendLayout();
             this.gb1.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -54,9 +64,9 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.tabControl1);
             this.panel1.Controls.Add(this.infoButton);
             this.panel1.Controls.Add(this.copyToClip);
-            this.panel1.Controls.Add(this.gb3);
             this.panel1.Controls.Add(this.gb2);
             this.panel1.Controls.Add(this.gb1);
             this.panel1.Controls.Add(this.startProcess);
@@ -69,26 +79,96 @@
             this.panel1.Size = new System.Drawing.Size(884, 361);
             this.panel1.TabIndex = 0;
             // 
-            // gb3
+            // tabControl1
             // 
-            this.gb3.Controls.Add(this.filesStatus);
-            this.gb3.Location = new System.Drawing.Point(575, 41);
-            this.gb3.Name = "gb3";
-            this.gb3.Size = new System.Drawing.Size(301, 287);
-            this.gb3.TabIndex = 8;
-            this.gb3.TabStop = false;
-            this.gb3.Text = "Status";
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Location = new System.Drawing.Point(575, 41);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(297, 287);
+            this.tabControl1.TabIndex = 11;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.errorsList);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(289, 261);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Błędy";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // errorsList
+            // 
+            this.errorsList.ContextMenuStrip = this.contextMenu;
+            this.errorsList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.errorsList.FormattingEnabled = true;
+            this.errorsList.Location = new System.Drawing.Point(3, 3);
+            this.errorsList.Name = "errorsList";
+            this.errorsList.Size = new System.Drawing.Size(283, 255);
+            this.errorsList.TabIndex = 0;
+            this.errorsList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.errorsList_MouseDown);
+            // 
+            // contextMenu
+            // 
+            this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openFile});
+            this.contextMenu.Name = "contextMenuStrip1";
+            this.contextMenu.Size = new System.Drawing.Size(135, 26);
+            this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
+            // 
+            // openFile
+            // 
+            this.openFile.Name = "openFile";
+            this.openFile.Size = new System.Drawing.Size(134, 22);
+            this.openFile.Text = "Otwórz plik";
+            this.openFile.Click += new System.EventHandler(this.openFile_Click);
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.filesStatus);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(289, 261);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Status plików";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // filesStatus
             // 
+            this.filesStatus.ContextMenuStrip = this.contextMenu;
             this.filesStatus.Dock = System.Windows.Forms.DockStyle.Fill;
             this.filesStatus.FormattingEnabled = true;
             this.filesStatus.HorizontalScrollbar = true;
-            this.filesStatus.Location = new System.Drawing.Point(3, 16);
+            this.filesStatus.Location = new System.Drawing.Point(3, 3);
             this.filesStatus.Name = "filesStatus";
             this.filesStatus.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.filesStatus.Size = new System.Drawing.Size(295, 268);
-            this.filesStatus.TabIndex = 0;
+            this.filesStatus.Size = new System.Drawing.Size(283, 255);
+            this.filesStatus.TabIndex = 2;
+            // 
+            // infoButton
+            // 
+            this.infoButton.Location = new System.Drawing.Point(851, 12);
+            this.infoButton.Name = "infoButton";
+            this.infoButton.Size = new System.Drawing.Size(25, 23);
+            this.infoButton.TabIndex = 10;
+            this.infoButton.Text = "?";
+            this.infoButton.UseVisualStyleBackColor = true;
+            this.infoButton.Click += new System.EventHandler(this.infoButton_Click);
+            // 
+            // copyToClip
+            // 
+            this.copyToClip.Enabled = false;
+            this.copyToClip.Location = new System.Drawing.Point(600, 10);
+            this.copyToClip.Name = "copyToClip";
+            this.copyToClip.Size = new System.Drawing.Size(113, 23);
+            this.copyToClip.TabIndex = 9;
+            this.copyToClip.Text = "Kopiuj do schowka";
+            this.copyToClip.UseVisualStyleBackColor = true;
+            this.copyToClip.Click += new System.EventHandler(this.copyToClip_Click);
             // 
             // gb2
             // 
@@ -162,7 +242,8 @@
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
-            this.progressBar});
+            this.progressBar,
+            this.fileProcessing});
             this.statusStrip.Location = new System.Drawing.Point(0, 339);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(884, 22);
@@ -178,7 +259,7 @@
             // progressBar
             // 
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(300, 16);
+            this.progressBar.Size = new System.Drawing.Size(500, 16);
             // 
             // backgroundWorker
             // 
@@ -187,26 +268,10 @@
             this.backgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker_ProgressChanged);
             this.backgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker_RunWorkerCompleted);
             // 
-            // copyToClip
+            // fileProcessing
             // 
-            this.copyToClip.Enabled = false;
-            this.copyToClip.Location = new System.Drawing.Point(600, 10);
-            this.copyToClip.Name = "copyToClip";
-            this.copyToClip.Size = new System.Drawing.Size(113, 23);
-            this.copyToClip.TabIndex = 9;
-            this.copyToClip.Text = "Kopiuj do schowka";
-            this.copyToClip.UseVisualStyleBackColor = true;
-            this.copyToClip.Click += new System.EventHandler(this.copyToClip_Click);
-            // 
-            // infoButton
-            // 
-            this.infoButton.Location = new System.Drawing.Point(851, 12);
-            this.infoButton.Name = "infoButton";
-            this.infoButton.Size = new System.Drawing.Size(25, 23);
-            this.infoButton.TabIndex = 10;
-            this.infoButton.Text = "?";
-            this.infoButton.UseVisualStyleBackColor = true;
-            this.infoButton.Click += new System.EventHandler(this.infoButton_Click);
+            this.fileProcessing.Name = "fileProcessing";
+            this.fileProcessing.Size = new System.Drawing.Size(0, 17);
             // 
             // MainWindow
             // 
@@ -219,7 +284,10 @@
             this.Text = "DocMails";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.gb3.ResumeLayout(false);
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.contextMenu.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
             this.gb2.ResumeLayout(false);
             this.gb1.ResumeLayout(false);
             this.statusStrip.ResumeLayout(false);
@@ -238,15 +306,21 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripProgressBar progressBar;
         private System.Windows.Forms.FolderBrowserDialog folderDialog;
-        private System.Windows.Forms.GroupBox gb3;
         private System.Windows.Forms.GroupBox gb2;
         private System.Windows.Forms.ListBox emailsList;
         private System.Windows.Forms.GroupBox gb1;
         private System.Windows.Forms.ListBox filesList;
-        private System.Windows.Forms.ListBox filesStatus;
         private System.ComponentModel.BackgroundWorker backgroundWorker;
         private System.Windows.Forms.Button copyToClip;
         private System.Windows.Forms.Button infoButton;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.ListBox errorsList;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.ListBox filesStatus;
+        private System.Windows.Forms.ContextMenuStrip contextMenu;
+        private System.Windows.Forms.ToolStripMenuItem openFile;
+        private System.Windows.Forms.ToolStripStatusLabel fileProcessing;
     }
 }
 

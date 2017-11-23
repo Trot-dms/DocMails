@@ -9,24 +9,26 @@ namespace DocMails
 {
     class ReadDocument
     {
-        public List<String> FolderFiles { get; set; }
-        public HashSet<String> FoundEmails { get; set; }
-        public Dictionary<string, string> FileStatus { get; set; }
+        public List<string> FolderFiles { get; set; }
+        public HashSet<string> FoundEmails { get; set; }
+        public List<string> FilesStatus { get; set; }
+        public List<string> ErrorsList { get; set; }
         public int ProcessingFile { get; set; }
 
         private string FolderPath { get; set; }
 
-        private const String emailRegex = @"(([\w-]+\.)+[\w-]+|([a-zA-Z]{1}|[\w-]{2,}))@"
+        private const string emailRegex = @"(([\w-]+\.)+[\w-]+|([a-zA-Z]{1}|[\w-]{2,}))@"
            + @"((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\.([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\."
              + @"([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\.([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
            + @"([a-zA-Z]+[\w-]+\.)+[a-zA-Z]{2,4})";
 
-        public ReadDocument(String folderPath)
+        public ReadDocument(string folderPath)
         {
             FolderPath = folderPath;
             FolderFiles = new List<string>();
             FoundEmails = new HashSet<string>();
-            FileStatus = new Dictionary<string, string>();
+            ErrorsList = new List<string>();
+            FilesStatus = new List<string>();
             ProcessingFile = 0;
         }
 
@@ -58,25 +60,26 @@ namespace DocMails
             MatchCollection matches = regex.Matches(result.Text);
             if (matches.Count == 0)
             {
-                FileStatus.Add(docFile, "Nie znaleziono.");
+                ErrorsList.Add(docFile);
             }
             else
             {
                 int count = 0;
                 foreach (Match match in matches)
                 {
-                    String email = Regex.Replace(match.Value.ToString(), @"\s+", "");
+                    string email = Regex.Replace(match.Value.ToString(), @"\s+", "");
                     FoundEmails.Add(email);
                     count++;
                 }
-                FileStatus.Add(docFile, "Znaleziono " + count + " email.");
+                FilesStatus.Add(count + " : "+docFile);
             }
         }
 
         public void ClearData()
         {
             FoundEmails.Clear();
-            FileStatus.Clear();
+            FilesStatus.Clear();
+            ErrorsList.Clear();
         }
 
         public void FinishExtraction()
@@ -85,7 +88,7 @@ namespace DocMails
 
             if (FoundEmails.Count > 0)
             {
-                String clip = "";
+                string clip = "";
                 foreach (object item in FoundEmails) clip += item.ToString() + "\r\n";
                 Clipboard.SetText(clip);
             }

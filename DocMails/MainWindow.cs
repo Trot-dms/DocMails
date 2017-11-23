@@ -9,6 +9,17 @@ namespace DocMails
     public partial class MainWindow : Form
     {
         private ReadDocument readDocument;
+        private const string FINISH = "Koniec";
+        private const string FINISH_OK = "Zakończono przeszukiwanie plików";
+        private const string READING = "Czytam...";
+        private const string WARNING = "Uwaga.";
+        private const string CLIP_COPY = "Zawartość skopiowano do schowka.";
+        private const string ABOUT_INFO = "Program do przeszukiwania dokumentów (doc, docx, pdf)\n" +
+                "pod kątem wyszukiwania adresów email.\n" +
+                "Wykorzystuje port biblioteki Apache Tika.\n\n" +
+                "Autor : Kamil Golis." +
+                "\n\nProgram na licencji Open Source (Apache 2.0)";
+        private const string ABOUT = "O programie";
 
         public MainWindow()
         {
@@ -20,8 +31,8 @@ namespace DocMails
         {
             folderDialog.ShowDialog();
 
-            String folderPathString = folderDialog.SelectedPath;
-            if (!folderPathString.Equals(""))
+            string folderPathString = folderDialog.SelectedPath;
+            if (!string.IsNullOrEmpty(folderPathString))
             {
                 filesList.Items.Clear();
                 filesStatus.Items.Clear();
@@ -44,6 +55,7 @@ namespace DocMails
                 progressBar.Minimum = 0;
                 progressBar.Maximum = filesList.Items.Count + 1;
                 progressBar.Value = 1;
+                fileProcessing.Text = READING;
                 disableButtons();
                 emailsList.Items.Clear();
                 backgroundWorker.RunWorkerAsync();
@@ -72,46 +84,32 @@ namespace DocMails
             }
         }
 
-        private void fillStatusList(Dictionary<string, string> filesStatuses)
+        private void fillStatusList(ReadDocument document)
         {
-            filesStatus.Items.Add("Błędy:");
-            List<string> errList = new List<string>();
-            List<string> okList = new List<string>();
-
-            foreach (KeyValuePair<string, string> kv in filesStatuses)
-            {
-                if (kv.Value.Equals("Nie znaleziono."))
-                {
-                    errList.Add(kv.Key);
-                }
-                else
-                {
-                    okList.Add(kv.Key + " : " + kv.Value);
-                }
-            }
-            filesStatus.Items.AddRange(errList.ToArray());
-            filesStatus.Items.Add("\n");
-            filesStatus.Items.AddRange(okList.ToArray());
+            errorsList.Items.AddRange(document.ErrorsList.ToArray());
+            filesStatus.Items.AddRange(document.FilesStatus.ToArray());
         }
 
-        private void fillEmailList(HashSet<string> emails)
+        private void fillEmailList(ReadDocument document)
         {
-            emailsList.Items.AddRange(emails.ToArray());
+            emailsList.Items.AddRange(document.FoundEmails.ToArray());
         }
 
         private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             progressBar.Value = readDocument.ProcessingFile;
+            fileProcessing.Text = readDocument.ProcessingFile + " / " + filesList.Items.Count;
         }
 
         private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            fillEmailList(readDocument.FoundEmails);
-            fillStatusList(readDocument.FileStatus);
+            fillEmailList(readDocument);
+            fillStatusList(readDocument);
             readDocument.FinishExtraction();
             progressBar.Value = 0;
+            fileProcessing.Text = "";
             enableButtons();
-            MessageBox.Show("Zakończono przeszukiwanie plików.", "Koniec", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(FINISH_OK, FINISH, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -127,15 +125,38 @@ namespace DocMails
         private void copyToClip_Click(object sender, EventArgs e)
         {
             readDocument.FinishExtraction();
-            MessageBox.Show("Zawartość skopiowano do schowka.", "Uwaga", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(CLIP_COPY, WARNING, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void infoButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Program do przeszukiwania dokumentów (doc, docx, pdf)\n" +
-                "pod kątem wyszukiwania adresów email.\n" +
-                "Wykorzystuje port biblioteki Apache Tika.\n\n" +
-                "Autor : Kamil Golis.", "O programie", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            MessageBox.Show(ABOUT_INFO, ABOUT, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+
+        private void openFile_Click(object sender, EventArgs e)
+        {
+            string selectedFile = errorsList.SelectedItem.ToString();
+            if (!string.IsNullOrEmpty(selectedFile))
+            {
+                System.Diagnostics.Process.Start(selectedFile);
+            }
+        }
+
+        private void contextMenu_Opening(object sender, CancelEventArgs e)
+        {
+            if (errorsList.SelectedItem != null)
+            {
+                contextMenu.Enabled = true;
+            }
+            else
+            {
+                contextMenu.Enabled = false;
+            }
+        }
+
+        private void errorsList_MouseDown(object sender, MouseEventArgs e)
+        {
+            errorsList.SelectedIndex = errorsList.IndexFromPoint(e.X, e.Y);
         }
     }
 }
