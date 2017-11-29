@@ -85,6 +85,7 @@ namespace DocMails
         public void FinishExtraction()
         {
             Clipboard.Clear();
+            ProcessingFile = 0;
 
             if (FoundEmails.Count > 0)
             {

@@ -57,9 +57,16 @@ namespace DocMails
                 progressBar.Value = 1;
                 fileProcessing.Text = READING;
                 disableButtons();
-                emailsList.Items.Clear();
+                clearLists();
                 backgroundWorker.RunWorkerAsync();
             }
+        }
+
+        private void clearLists()
+        {
+            emailsList.Items.Clear();
+            errorsList.Items.Clear();
+            filesStatus.Items.Clear();
         }
 
         private void disableButtons()

@@ -49,9 +49,9 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.fileProcessing = new System.Windows.Forms.ToolStripStatusLabel();
             this.folderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
-            this.fileProcessing = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -105,6 +105,7 @@
             this.errorsList.ContextMenuStrip = this.contextMenu;
             this.errorsList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.errorsList.FormattingEnabled = true;
+            this.errorsList.HorizontalScrollbar = true;
             this.errorsList.Location = new System.Drawing.Point(3, 3);
             this.errorsList.Name = "errorsList";
             this.errorsList.Size = new System.Drawing.Size(283, 255);
@@ -184,6 +185,7 @@
             // 
             this.emailsList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.emailsList.FormattingEnabled = true;
+            this.emailsList.HorizontalScrollbar = true;
             this.emailsList.Location = new System.Drawing.Point(3, 16);
             this.emailsList.Name = "emailsList";
             this.emailsList.SelectionMode = System.Windows.Forms.SelectionMode.None;
@@ -204,6 +206,7 @@
             // 
             this.filesList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.filesList.FormattingEnabled = true;
+            this.filesList.HorizontalScrollbar = true;
             this.filesList.Location = new System.Drawing.Point(3, 16);
             this.filesList.Name = "filesList";
             this.filesList.SelectionMode = System.Windows.Forms.SelectionMode.None;
@@ -261,17 +264,17 @@
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(500, 16);
             // 
+            // fileProcessing
+            // 
+            this.fileProcessing.Name = "fileProcessing";
+            this.fileProcessing.Size = new System.Drawing.Size(0, 17);
+            // 
             // backgroundWorker
             // 
             this.backgroundWorker.WorkerReportsProgress = true;
             this.backgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker_DoWork);
             this.backgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker_ProgressChanged);
             this.backgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker_RunWorkerCompleted);
-            // 
-            // fileProcessing
-            // 
-            this.fileProcessing.Name = "fileProcessing";
-            this.fileProcessing.Size = new System.Drawing.Size(0, 17);
             // 
             // MainWindow
             // 
